@@ -57,6 +57,7 @@ class RedditAPI {
             `
             SELECT id, title, url, userId, createdAt, updatedAt
             FROM posts
+            INNER JOIN users ON posts.userID=users.userID
             ORDER BY createdAt DESC
             LIMIT 25`
         );
