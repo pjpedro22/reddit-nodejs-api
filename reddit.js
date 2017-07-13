@@ -7,6 +7,7 @@ class RedditAPI {
     }
 
     createUser(user) {
+        
         /*
         first we have to hash the password. we will learn about hashing next week.
         the goal of hashing is to store a digested version of the password from which
@@ -15,7 +16,7 @@ class RedditAPI {
          */
         return bcrypt.hash(user.password, HASH_ROUNDS)
             .then(hashedPassword => {
-                return this.conn.query('INSERT INTO users (username,password, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())', [user.username, hashedPassword]);
+                return this.conn.query('INSERT INTO users (username, password, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())', [user.username, hashedPassword]);
             })
             .then(result => {
                 return result.insertId;
@@ -35,7 +36,7 @@ class RedditAPI {
         return this.conn.query(
             `
             INSERT INTO posts (userId, title, url, createdAt, updatedAt)
-            VALUES (?, ?, ?, NOW(). NOW())`,
+            VALUES (?, ?, ?, NOW(), NOW())`,
             [post.userId, post.title, post.url]
         )
             .then(result => {
@@ -43,7 +44,7 @@ class RedditAPI {
             });
     }
 
-    getAllPosts() {
+    getAllPosts(callback) {
         /*
         strings delimited with ` are an ES2015 feature called "template strings".
         they are more powerful than what we are using them for here. one feature of
@@ -55,12 +56,15 @@ class RedditAPI {
          */
         return this.conn.query(
             `
-            SELECT id, title, url, userId, createdAt, updatedAt
+            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt, users.id, users.username, users.createdAt, users.updatedAt
             FROM posts
-            INNER JOIN users ON posts.userID=users.userID
+            JOIN users ON posts.userID=users.id
             ORDER BY createdAt DESC
             LIMIT 25`
-        );
+        ).map(array => {
+            
+        });
+        
     }
 }
 
