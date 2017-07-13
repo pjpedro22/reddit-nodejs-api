@@ -15,7 +15,6 @@ var connection = mysql.createPool({
 
 // load our API and pass it the connection
 var RedditAPI = require('./reddit');
-console.log('Hello Pedro!');
 
 var myReddit = new RedditAPI(connection);
 
