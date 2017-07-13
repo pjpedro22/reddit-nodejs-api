@@ -19,5 +19,26 @@ CREATE TABLE posts (
   createdAt DATETIME NOT NULL,
   updatedAt DATETIME NOT NULL,
   KEY userId (userId), -- why did we add this here? ask me :)
-  CONSTRAINT validUser FOREIGN KEY (userId) REFERENCES users (id) ON DELETE SET NULL
+  CONSTRAINT validUser FOREIGN KEY (userId) REFERENCES users (id) ON DELETE SET NULL,
+  subredditID INT,
+  FOREIGN KEY (subredditID) REFERENCES subreddits(id)
 );
+
+--This creates the subreddits table. 
+CREATE TABLE subreddits (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+  description VARCHAR(200),
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME NOT NULL,
+  UNIQUE KEY (name)
+);
+
+--This add subredditID column in post table.
+ALTER TABLE posts (
+  subredditID INT,
+  FOREIGN KEY (subredditID) REFERENCES subreddits(id)
+);
+
+--Drop post table.
+DROP TABLE posts;
