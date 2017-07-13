@@ -22,7 +22,7 @@ var myReddit = new RedditAPI(connection);
 // The function will return the newly created user's ID in the callback
 //This is calling the function
 myReddit.createUser({
-    username: 'CM_ME_CUTES',
+    username: 'LM_ME_CUTES',
     password: 'abc123'
 })
     .then(newUserId => {
@@ -44,4 +44,28 @@ myReddit.createUser({
         console.log(error.stack);
     });
 
+myReddit.getAllPosts()
+    .then(function(result) {
+        console.log(result, 'This is the results of all posts!');
+    })
+    .catch(error => {
+        console.log('getAllPosts did not work!', error);
+    });
 
+
+//Call the createSubreddit function.
+myReddit.createSubreddit({
+    name: 'Rising',
+    description: ''
+    })
+    .then(newSubredditID => {
+        console.log('New subreddit created! ID' + newSubredditID);
+    })
+    .catch(error => {
+        console.log('createSubreddit did not work!', error);
+    });
+    
+//Call the getAllSubreddits funtion.
+// myReddit.getAllSubreddits({
+    
+// }).then(newAllSubreddits)

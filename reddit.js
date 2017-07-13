@@ -56,16 +56,66 @@ class RedditAPI {
          */
         return this.conn.query(
             `
-            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt, users.id, users.username, users.createdAt, users.updatedAt
+            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt,
+            users.id, users.username, users.createdAt, users.updatedAt,
+            subreddits.id, subreddits.name, subreddits.description, subreddits.createdAt, subreddits.updatedAt
             FROM posts
-            JOIN users ON posts.userID=users.id
-            ORDER BY createdAt DESC
+            JOIN users ON posts.userID = users.id
+            JOIN subreddits ON posts.subredditID = subreddits.id
+            ORDER BY posts.createdAt DESC
             LIMIT 25`
         ).map(array => {
             
         });
         
     }
+    
+    /*
+    It should take a subreddit object that contains a name and description. It should insert the new subreddit, and return the ID of the new subreddit. 
+    You can take some inspiration from the createUser function which operates in a similar way. 
+    Just like for createUser, you'll have to check if you get a "duplicate entry" error and send a more specific error message.
+     */
+    createSubreddit(subreddit) {
+        return this.conn.query(
+            `
+            INSERT INTO subreddits (id, name, description, createdAt, updatedAt)
+            VALUES (?, ?, ?, NOW(), NOW())`,
+            [subreddit.id, subreddit.name, subreddit.description]
+        )
+            .then(result => {
+                return result.insertId;
+            })
+            .catch(error => {
+                // Special error handling for duplicate entry
+                if (error.code === 'ER_DUP_ENTRY') {
+                    throw new Error('A subreddit with this name already exists');
+                }
+                else {
+                    throw error;
+                }
+            });
+    }
+    
+    /* 
+    add a getAllSubreddits() function. It should return the list of all subreddits, 
+    ordered by the newly created ones first, as a Promise.
+     */
+    getAllSubreddits(allSubreddits) {
+        return this.conn.query(
+            `
+            SELECT * FROM subreddits
+            ORDER BY subreddits.updatedAt DESC`
+        )
+        .then(result => {
+            return result.map(array => {
+                
+            });
+        })
+        .catch(error => {
+            throw error;
+        });
+    }
 }
 
+    
 module.exports = RedditAPI;
