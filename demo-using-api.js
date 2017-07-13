@@ -1,10 +1,13 @@
 // load the mysql library
+"use strict";
+
 var mysql = require('promise-mysql');
+// console.log('Hello Pedro!');
 
 // create a connection to our Cloud9 server
 var connection = mysql.createPool({
     host     : 'localhost',
-    user     : 'ziad_saab', // CHANGE THIS :)
+    user     : 'pjpedro22', // CHANGE THIS :)
     password : '',
     database: 'reddit',
     connectionLimit: 10
@@ -12,6 +15,7 @@ var connection = mysql.createPool({
 
 // load our API and pass it the connection
 var RedditAPI = require('./reddit');
+console.log('Hello Pedro!');
 
 var myReddit = new RedditAPI(connection);
 
@@ -39,3 +43,5 @@ myReddit.createUser({
     .catch(error => {
         console.log(error.stack);
     });
+
+myReddit.createUser();
