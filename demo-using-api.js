@@ -22,7 +22,7 @@ var myReddit = new RedditAPI(connection);
 // The function will return the newly created user's ID in the callback
 //This is calling the function
 myReddit.createUser({
-    username: 'LM_ME_CUTES',
+    username: 'WM_ME_CUTES',
     password: 'abc123'
 })
     .then(newUserId => {
@@ -55,7 +55,7 @@ myReddit.getAllPosts()
 
 //Call the createSubreddit function.
 myReddit.createSubreddit({
-    name: 'Rising',
+    name: 'Controversial5',
     description: ''
     })
     .then(newSubredditID => {

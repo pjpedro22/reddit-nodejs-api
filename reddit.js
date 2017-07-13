@@ -44,28 +44,33 @@ class RedditAPI {
             });
     }
 
-    getAllPosts(callback) {
-        /*
-        strings delimited with ` are an ES2015 feature called "template strings".
-        they are more powerful than what we are using them for here. one feature of
-        template strings is that you can write them on multiple lines. if you try to
-        skip a line in a single- or double-quoted string, you would get a syntax error.
+    /*
+    strings delimited with ` are an ES2015 feature called "template strings".
+    they are more powerful than what we are using them for here. one feature of
+    template strings is that you can write them on multiple lines. if you try to
+    skip a line in a single- or double-quoted string, you would get a syntax error.
 
-        therefore template strings make it very easy to write SQL queries that span multiple
-        lines without having to manually split the string line by line.
-         */
+    therefore template strings make it very easy to write SQL queries that span multiple
+    lines without having to manually split the string line by line.
+     */
+    
+    getAllPosts(allPost) {
         return this.conn.query(
             `
-            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt,
-            users.id, users.username, users.createdAt, users.updatedAt,
-            subreddits.id, subreddits.name, subreddits.description, subreddits.createdAt, subreddits.updatedAt
+            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt, users.id, users.username, users.createdAt, users.updatedAt
             FROM posts
             JOIN users ON posts.userID = users.id
             JOIN subreddits ON posts.subredditID = subreddits.id
             ORDER BY posts.createdAt DESC
             LIMIT 25`
-        ).map(array => {
-            
+        )
+        .then(result => {
+            return result.map(array => {
+                
+            });
+        })
+        .catch(error => {
+            throw error;
         });
         
     }
@@ -110,9 +115,6 @@ class RedditAPI {
             return result.map(array => {
                 
             });
-        })
-        .catch(error => {
-            throw error;
         });
     }
 }
