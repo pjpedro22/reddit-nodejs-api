@@ -1,3 +1,5 @@
+"use strict";
+
 var bcrypt = require('bcrypt-as-promised');
 var HASH_ROUNDS = 10;
 
@@ -33,16 +35,22 @@ class RedditAPI {
     }
 
     createPost(post) {
-        return this.conn.query(
+        if (post.subredditId === null) {
+            throw new Error('You need to enter a subreddit!');
+        }
+        else {
+          return this.conn.query(
             `
-            INSERT INTO posts (userId, title, url, createdAt, updatedAt)
-            VALUES (?, ?, ?, NOW(), NOW())`,
-            [post.userId, post.title, post.url]
+            INSERT INTO posts (userId, title, url, subredditId, createdAt, updatedAt)
+            VALUES (?, ?, ?, ?, NOW(), NOW())`,
+            [post.userId, post.title, post.url, post.subredditId]
         )
             .then(result => {
                 return result.insertId;
             });
-    }
+        }
+    }    
+        
 
     /*
     strings delimited with ` are an ES2015 feature called "template strings".
@@ -57,16 +65,17 @@ class RedditAPI {
     getAllPosts(allPost) {
         return this.conn.query(
             `
-            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt, users.id, users.username, users.createdAt, users.updatedAt
+            SELECT posts.id, posts.title, posts.url, posts.userId, posts.createdAt, posts.updatedAt, users.id, users.username, users.createdAt, users.updatedAt,
+                subreddits.id, subreddits.name, subreddits.description, subreddits.createdAt, subreddits.updatedAt 
             FROM posts
-            JOIN users ON posts.userID = users.id
-            JOIN subreddits ON posts.subredditID = subreddits.id
+            JOIN users ON posts.userId = users.id
+            JOIN subreddits ON posts.subredditId = subreddits.id
             ORDER BY posts.createdAt DESC
             LIMIT 25`
         )
         .then(result => {
             return result.map(array => {
-                
+                return array;
             });
         })
         .catch(error => {
@@ -113,7 +122,7 @@ class RedditAPI {
         )
         .then(result => {
             return result.map(array => {
-                
+                return array;
             });
         });
     }

@@ -19,53 +19,58 @@ var RedditAPI = require('./reddit');
 var myReddit = new RedditAPI(connection);
 
 // We call this function to create a new user to test our API
-// The function will return the newly created user's ID in the callback
-//This is calling the function
+// The function will return the newly created user's Id in the callback
+// This is calling the function
 myReddit.createUser({
-    username: 'WM_ME_CUTES',
+    username: 'W26M_ME_CUTES',
     password: 'abc123'
 })
     .then(newUserId => {
-        // Now that we have a user ID, we can use it to create a new post
-        // Each post should be associated with a user ID
-        console.log('New user created! ID=' + newUserId);
+        // Now that we have a user Id, we can use it to create a new post
+        // Each post should be associated with a user Id
+        console.log('New user created! Id=' + newUserId);
 
         return myReddit.createPost({
             title: 'Hello Reddit! This is my first post',
             url: 'http://www.digg.com',
-            userId: newUserId
+            userId: newUserId,
+            subredditId: 1
         });
     })
     .then(newPostId => {
-        // If we reach that part of the code, then we have a new post. We can print the ID
-        console.log('New post created! ID=' + newPostId);
+        // If we reach that part of the code, then we have a new post. We can print the Id
+        console.log('New post created! Id=' + newPostId);
     })
     .catch(error => {
         console.log(error.stack);
     });
 
-myReddit.getAllPosts()
-    .then(function(result) {
-        console.log(result, 'This is the results of all posts!');
-    })
-    .catch(error => {
-        console.log('getAllPosts did not work!', error);
-    });
+// myReddit.getAllPosts()
+//     .then(function(result) {
+//         console.log(result, 'This is the results of all posts!');
+//     })
+//     .catch(error => {
+//         console.log('getAllPosts did not work!', error);
+//     });
 
 
-//Call the createSubreddit function.
-myReddit.createSubreddit({
-    name: 'Controversial5',
-    description: ''
-    })
-    .then(newSubredditID => {
-        console.log('New subreddit created! ID' + newSubredditID);
-    })
-    .catch(error => {
-        console.log('createSubreddit did not work!', error);
-    });
+// // Call the createSubreddit function.
+// myReddit.createSubreddit({
+//     name: 'Hot12',
+//     description: ''
+//     })
+//     .then(newSubredditId => {
+//         console.log('New subreddit created! Id' + newSubredditId);
+//     })
+//     .catch(error => {
+//         console.log('createSubreddit did not work!', error);
+//     });
     
-//Call the getAllSubreddits funtion.
-// myReddit.getAllSubreddits({
-    
-// }).then(newAllSubreddits)
+// //Call the getAllSubreddits funtion.
+// myReddit.getAllSubreddits()
+//     .then(function(result) {
+//         console.log(result, 'This is the results of all subreddits!');
+//     })
+//     .catch(error => {
+//         console.log('getAllSubreddits dit not work!', error);
+    // });
